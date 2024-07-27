@@ -1,0 +1,14 @@
+{
+  "name": "nodejs-backend-web",
+  "version": "1.0.0",
+  "description": "Nodejs task for backend web",
+  "main": "index.js",
+  "scripts": {
+    "test": "Jest"
+  },
+  "author": "Kenny Maes",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}
