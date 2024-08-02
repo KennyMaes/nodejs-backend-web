@@ -1,5 +1,6 @@
 import express, { Request, Response, NextFunction } from 'express';
 import dotenv from 'dotenv';
+import userRoutes from './routes/userRoutes';
 
 dotenv.config();
 
@@ -14,6 +15,8 @@ app.use((req: Request, res: Response, next: NextFunction) => {
 
 // JSON parsing middleware
 app.use(express.json());
+
+app.use('/users', userRoutes);
 
 // A simple route
 app.get('/', (req: Request, res: Response) => {

@@ -7,19 +7,24 @@
     "start-db": "cd ops && docker compose --env-file ../.env up",
     "build": "tsc",
     "start": "node dist/app.js",
-    "dev": "ts-node-dev --respawn src/app.ts"
+    "dev": "ts-node-dev --respawn src/app.ts",
+    "migrate": "node-pg-migrate up"
   },
   "author": "Kenny Maes",
   "license": "ISC",
   "dependencies": {
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
-    "pg": "^8.12.0"
+    "pg": "^8.12.0",
+    "ts-node": "^10.9.2"
   },
   "devDependencies": {
-    "ts-node-dev": "^2.0.0",
     "@types/express": "^4.17.21",
-    "@types/node": "^22.0.0",
+    "@types/node": "^22.0.2",
+    "@types/pg": "^8.11.6",
+    "dotenv-cli": "^7.4.2",
+    "node-pg-migrate": "^7.6.0",
+    "ts-node-dev": "^2.0.0",
     "typescript": "^5.5.4"
   }
 }
