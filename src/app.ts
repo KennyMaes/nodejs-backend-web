@@ -1,13 +1,13 @@
 import express, { Request, Response, NextFunction } from 'express';
 import dotenv from 'dotenv';
-import userRoutes from './routes/userRoutes';
+import errorHandler from './util/errorHandler';
+import {UserController} from './controllers/userController';
 
 dotenv.config();
 
 const app = express();
 const port = process.env.PORT || 3000;
 
-// Middleware example
 app.use((req: Request, res: Response, next: NextFunction) => {
     console.log(`${req.method} ${req.url}`);
     next();
@@ -16,12 +16,10 @@ app.use((req: Request, res: Response, next: NextFunction) => {
 // JSON parsing middleware
 app.use(express.json());
 
-app.use('/users', userRoutes);
+UserController.register(app);
 
-// A simple route
-app.get('/', (req: Request, res: Response) => {
-    res.send('Hello, World!');
-});
+// Middleware to handle unhandled exceptions from the application
+app.use(errorHandler)
 
 // Start the server
 app.listen(port, () => {

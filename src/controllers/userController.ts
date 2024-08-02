@@ -1,9 +1,22 @@
-import { Request, Response } from 'express';
-import { UserService } from '../services/userService';
+import {Application, NextFunction, Request, Response} from 'express';
+import {UserService} from '../services/userService';
 
 const userService = new UserService();
 
 export class UserController {
+    private basePath: string = '/users'
+
+    static register(app: Application): void {
+            new UserController(app);
+    }
+
+    constructor(app: Application) {
+        app.get(`${this.basePath}/`, (req: Request, res: Response, next: NextFunction) => this.getAllUsers(req, res).catch(next));
+        app.get(`${this.basePath}/:id`, (req: Request, res: Response, next: NextFunction) => this.getUserById(req, res).catch(next));
+        app.post(`${this.basePath}/`, (req: Request<never, never, { name: string, email: string}>, res: Response, next: NextFunction) => this.createUser(req, res).catch(next));
+        app.put(`${this.basePath}/:id`, (req: Request<{id: string}, never, { name: string, email: string}>, res: Response, next: NextFunction) => this.updateUser(req, res).catch(next));
+        app.delete(`${this.basePath}/:id`, (req: Request<{id: string}>, res: Response, next: NextFunction) => this.deleteUser(req, res).catch(next));
+    }
     async getAllUsers(req: Request, res: Response) {
         const users = await userService.findAll();
         res.json(users);
@@ -18,12 +31,12 @@ export class UserController {
         }
     }
 
-    async createUser(req: Request, res: Response) {
+    async createUser(req: Request<never, never, {name: string, email: string}>, res: Response) {
         const newUser = await userService.create(req.body);
         res.status(201).json(newUser);
     }
 
-    async updateUser(req: Request, res: Response) {
+    async updateUser(req: Request<{id: string}, never, {name: string, email: string}>, res: Response) {
         const updatedUser = await userService.update(Number(req.params.id), req.body);
         if (updatedUser) {
             res.json(updatedUser);
@@ -32,7 +45,7 @@ export class UserController {
         }
     }
 
-    async deleteUser(req: Request, res: Response) {
+    async deleteUser(req: Request<{id: string}>, res: Response) {
         await userService.delete(Number(req.params.id));
         res.status(204).end();
     }

@@ -1,5 +1,6 @@
 import { UserRepository } from '../repositories/userRepository';
 import { User } from '../entities/User';
+import {BadRequestError} from '../util/exceptions';
 
 export class UserService {
     private userRepository = new UserRepository();
@@ -13,6 +14,9 @@ export class UserService {
     }
 
     async create(user: Omit<User, 'id'>): Promise<User> {
+        if (!user.name || !user.email) {
+            throw new BadRequestError('Name and email are required')
+        }
         return this.userRepository.create(user);
     }
 
