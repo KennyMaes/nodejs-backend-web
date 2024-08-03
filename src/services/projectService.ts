@@ -1,7 +1,7 @@
 import {BadRequestError} from '../util/exceptions';
 import {Project} from '../entities/Project';
 import {ProjectRepository} from '../repositories/projectRepository';
-2
+
 export class ProjectService {
     private projectRepository = new ProjectRepository();
 
@@ -22,15 +22,15 @@ export class ProjectService {
         return this.projectRepository.linkProjectsToUser(id, projectIds);
     }
 
-    async create(product: Omit<Project, 'id'>): Promise<Project> {
-        if (!product.name || !product.description) {
+    async create(project: Omit<Project, 'id'>): Promise<Project> {
+        if (!project.name || !project.description) {
             throw new BadRequestError('Name and description are required')
         }
-        return this.projectRepository.create(product);
+        return this.projectRepository.create(project);
     }
 
-    async update(id: number, product: Partial<Project>): Promise<Project | null> {
-        return this.projectRepository.update(id, product);
+    async update(id: number, project: Partial<Project>): Promise<Project | null> {
+        return this.projectRepository.update(id, project);
     }
 
     async delete(id: number): Promise<void> {

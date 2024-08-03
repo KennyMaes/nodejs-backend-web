@@ -43,12 +43,12 @@ export class ProjectRepository {
         await pool.query('DELETE FROM projects WHERE id = $1', [id]);
     }
 
-    async linkProjectsToUser(userId: number, productIds: string[]):Promise<void> {
+    async linkProjectsToUser(userId: number, projectIds: string[]):Promise<void> {
         const client = await pool.connect();
         try {
             await client.query('BEGIN');
 
-            for (const prodId of productIds) {
+            for (const prodId of projectIds) {
                 await client.query(
                     'INSERT INTO user_projects (user_id, project_id) VALUES ($1, $2)',
                     [userId, prodId]
