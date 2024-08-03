@@ -42,7 +42,6 @@ export class UserController {
     }
 
     async linkProjectsToUser(req: Request<{id: string}, never, {"projectIds": string[]}>, res: Response) {
-        console.debug("UserController: LinkProjects")
         await projectService.linkProjectsToUser(Number(req.params.id), req.body.projectIds)
         res.status(201).send
     }

@@ -18,7 +18,6 @@ export class ProjectService {
     }
 
     async linkProjectsToUser(id: number, projectIds: string[]): Promise<void> {
-        console.debug("UserService: LinkProjects")
         return this.projectRepository.linkProjectsToUser(id, projectIds);
     }
 
