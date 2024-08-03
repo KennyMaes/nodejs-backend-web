@@ -8,4 +8,6 @@ export class User {
         this.name = name;
         this.email = email;
     }
+
+    //TODO: Add validation here instead of in the service
 }
