@@ -13,8 +13,8 @@ export class ProjectService {
         return this.projectRepository.findById(id);
     }
 
-    async findProjectsByUserId(userId: number): Promise<Project[]> {
-        return this.projectRepository.getProjectsByUserId(userId);
+    async findProjectsByUserId(userId: number, limit?: number): Promise<Project[]> {
+        return this.projectRepository.getProjectsByUserId(userId, limit);
     }
 
     async linkProjectsToUser(id: number, projectIds: string[]): Promise<void> {
