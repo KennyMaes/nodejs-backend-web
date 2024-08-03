@@ -12,15 +12,30 @@ export class ProjectRepository {
         return result.rows[0] || null;
     }
 
-    async getProjectsByUserId(userId: number, limit?: number): Promise<Project[]> {
-        const result = await pool.query(
-            `SELECT p.* FROM projects p
+    async getProjectsByUserId(userId: number, limit?: number, offset?: number): Promise<Project[]> {
+        let query = `
+            SELECT p.*
+            FROM projects p
             JOIN user_projects up ON p.id = up.project_id
             WHERE up.user_id = $1
-            ${limit ? 'LIMIT $2' : ''}
-            `, limit ? [userId, limit] : [userId]
-        );
-        return result.rows
+        `;
+
+        const values: (number)[] = [userId];
+
+        if (limit) {
+            query += 'LIMIT $2 ';
+            values.push(limit);
+        }
+
+        if (offset) {
+            if (limit) {
+                query += 'OFFSET $3';
+            } else {
+                query += 'OFFSET $2';
+            }
+            values.push(offset);
+        }
+        return pool.query(query, values).then(res => res.rows);
     }
 
     async create(project: Omit<Project, 'id'>): Promise<Project> {

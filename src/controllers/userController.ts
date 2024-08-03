@@ -15,7 +15,7 @@ export class UserController {
     constructor(app: Application) {
         app.get(`${this.basePath}/`, (req: Request, res: Response, next: NextFunction) => this.getAllUsers(req, res).catch(next));
         app.get(`${this.basePath}/:id`, (req: Request, res: Response, next: NextFunction) => this.getUserById(req, res).catch(next));
-        app.get(`${this.basePath}/:id/projects`, (req: Request<{id: string}, never, {id: number, name: string, description: string}[], {limit: string}>, res: Response, next: NextFunction) => this.getProjectsForUser(req, res).catch(next));
+        app.get(`${this.basePath}/:id/projects`, (req: Request<{id: string}, never, {id: number, name: string, description: string}[], {limit: string, offset: string}>, res: Response, next: NextFunction) => this.getProjectsForUser(req, res).catch(next));
         app.post(`${this.basePath}/`, (req: Request<never, never, { name: string, email: string}>, res: Response, next: NextFunction) => this.createUser(req, res).catch(next));
         app.post(`${this.basePath}/:id/projects`, (req: Request<{id: string}, never, {projectIds: string[]}>, res: Response, next: NextFunction) => this.linkProjectsToUser(req, res).catch(next));
         app.put(`${this.basePath}/:id`, (req: Request<{id: string}, never, { name: string, email: string}>, res: Response, next: NextFunction) => this.updateUser(req, res).catch(next));
@@ -35,9 +35,10 @@ export class UserController {
         }
     }
 
-    async getProjectsForUser(req: Request<{id: string}, never, {id: number, name: string, description: string}[], {limit: string}>, res: Response) {
+    async getProjectsForUser(req: Request<{id: string}, never, {id: number, name: string, description: string}[], {limit: string, offset: string}>, res: Response) {
         const limit: number | undefined = req.query.limit ? Number(req.query.limit) : undefined
-        let projects = await projectService.findProjectsByUserId(Number(req.params.id), limit);
+        const offset: number | undefined = req.query.offset ? Number(req.query.offset) : undefined
+        let projects = await projectService.findProjectsByUserId(Number(req.params.id), limit, offset);
         res.status(201).send(projects);
     }
 
