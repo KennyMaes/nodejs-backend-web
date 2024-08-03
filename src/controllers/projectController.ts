@@ -33,6 +33,7 @@ export class ProjectController {
         }
     }
 
+
     // TODO: Replace {} with upsert dto object
     async createProject(req: Request<never, never, {name: string, description: string}>, res: Response) {
         const project = await projectService.create(req.body);

@@ -1,7 +1,9 @@
 import {Application, NextFunction, Request, Response} from 'express';
 import {UserService} from '../services/userService';
+import {ProjectService} from '../services/projectService';
 
 const userService = new UserService();
+const projectService: ProjectService = new ProjectService();
 
 export class UserController {
     readonly basePath: string = '/users'
@@ -13,7 +15,9 @@ export class UserController {
     constructor(app: Application) {
         app.get(`${this.basePath}/`, (req: Request, res: Response, next: NextFunction) => this.getAllUsers(req, res).catch(next));
         app.get(`${this.basePath}/:id`, (req: Request, res: Response, next: NextFunction) => this.getUserById(req, res).catch(next));
+        app.get(`${this.basePath}/:id/projects`, (req: Request<{id: string}>, res: Response, next: NextFunction) => this.getProjectsForUser(req, res).catch(next));
         app.post(`${this.basePath}/`, (req: Request<never, never, { name: string, email: string}>, res: Response, next: NextFunction) => this.createUser(req, res).catch(next));
+        app.post(`${this.basePath}/:id/projects`, (req: Request<{id: string}, never, {projectIds: string[]}>, res: Response, next: NextFunction) => this.linkProjectsToUser(req, res).catch(next));
         app.put(`${this.basePath}/:id`, (req: Request<{id: string}, never, { name: string, email: string}>, res: Response, next: NextFunction) => this.updateUser(req, res).catch(next));
         app.delete(`${this.basePath}/:id`, (req: Request<{id: string}>, res: Response, next: NextFunction) => this.deleteUser(req, res).catch(next));
     }
@@ -29,6 +33,17 @@ export class UserController {
         } else {
             res.status(404).send('User not found');
         }
+    }
+
+    async getProjectsForUser(req: Request<{id: string}>, res: Response) {
+        let projects = await projectService.findProjectsByUserId(Number(req.params.id));
+        res.status(201).send(projects);
+    }
+
+    async linkProjectsToUser(req: Request<{id: string}, never, {"projectIds": string[]}>, res: Response) {
+        console.debug("UserController: LinkProjects")
+        await projectService.linkProjectsToUser(Number(req.params.id), req.body.projectIds)
+        res.status(201).send
     }
 
     async createUser(req: Request<never, never, {name: string, email: string}>, res: Response) {

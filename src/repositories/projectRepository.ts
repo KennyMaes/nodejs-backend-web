@@ -12,6 +12,15 @@ export class ProjectRepository {
         return result.rows[0] || null;
     }
 
+    async getProjectsByUserId(userId: number): Promise<Project[]> {
+        const result = await pool.query(
+            `SELECT p.* FROM projects p
+            JOIN user_projects up ON p.id = up.project_id
+            WHERE up.user_id = $1`, [userId]
+        );
+        return result.rows
+    }
+
     async create(project: Omit<Project, 'id'>): Promise<Project> {
         const { name, description } = project;
         const result = await pool.query(
@@ -32,5 +41,26 @@ export class ProjectRepository {
 
     async delete(id: number): Promise<void> {
         await pool.query('DELETE FROM projects WHERE id = $1', [id]);
+    }
+
+    async linkProjectsToUser(userId: number, productIds: string[]):Promise<void> {
+        const client = await pool.connect();
+        try {
+            await client.query('BEGIN');
+
+            for (const prodId of productIds) {
+                await client.query(
+                    'INSERT INTO user_projects (user_id, project_id) VALUES ($1, $2)',
+                    [userId, prodId]
+                );
+            }
+
+            await client.query('COMMIT');
+        } catch (error) {
+            await client.query('ROLLBACK');
+            throw error;
+        } finally {
+            client.release();
+        }
     }
 }
