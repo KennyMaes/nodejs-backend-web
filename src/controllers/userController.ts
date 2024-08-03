@@ -1,6 +1,8 @@
 import {Application, NextFunction, Request, Response} from 'express';
 import userService from '../services/userService';
 import projectService from '../services/projectService';
+import {User} from '../entities/User';
+import {UpsertUserDto} from '../dto/upsertUserDto';
 
 
 export class UserController {
@@ -14,23 +16,19 @@ export class UserController {
         app.get(`${this.basePath}/`, (req: Request, res: Response, next: NextFunction) => this.getAllUsers(req, res).catch(next));
         app.get(`${this.basePath}/:id`, (req: Request, res: Response, next: NextFunction) => this.getUserById(req, res).catch(next));
         app.get(`${this.basePath}/:id/projects`, (req: Request<{id: string}, never, {id: number, name: string, description: string}[], {limit: string, offset: string}>, res: Response, next: NextFunction) => this.getProjectsForUser(req, res).catch(next));
-        app.post(`${this.basePath}/`, (req: Request<never, never, { name: string, email: string}>, res: Response, next: NextFunction) => this.createUser(req, res).catch(next));
+        app.post(`${this.basePath}/`, (req: Request<never, never, UpsertUserDto>, res: Response, next: NextFunction) => this.createUser(req, res).catch(next));
         app.post(`${this.basePath}/:id/projects`, (req: Request<{id: string}, never, {projectIds: string[]}>, res: Response, next: NextFunction) => this.linkProjectsToUser(req, res).catch(next));
-        app.put(`${this.basePath}/:id`, (req: Request<{id: string}, never, { name: string, email: string}>, res: Response, next: NextFunction) => this.updateUser(req, res).catch(next));
+        app.put(`${this.basePath}/:id`, (req: Request<{id: string}, never, UpsertUserDto>, res: Response, next: NextFunction) => this.updateUser(req, res).catch(next));
         app.delete(`${this.basePath}/:id`, (req: Request<{id: string}>, res: Response, next: NextFunction) => this.deleteUser(req, res).catch(next));
     }
-    async getAllUsers(req: Request, res: Response) {
+    async getAllUsers(req: Request, res: Response<User[]>) {
         const users = await userService.findAll();
         res.json(users);
     }
 
     async getUserById(req: Request, res: Response) {
         const user = await userService.findById(Number(req.params.id));
-        if (user) {
-            res.json(user);
-        } else {
-            res.status(404).send('User not found');
-        }
+        res.json(user);
     }
 
     async getProjectsForUser(req: Request<{id: string}, never, {id: number, name: string, description: string}[], {limit: string, offset: string}>, res: Response) {
@@ -45,21 +43,19 @@ export class UserController {
         res.status(201).end()
     }
 
-    async createUser(req: Request<never, never, {name: string, email: string}>, res: Response) {
-        const newUser = await userService.create(req.body);
+    async createUser(req: Request<never, never, UpsertUserDto>, res: Response) {
+        const user = User.newUser(req.body)
+        const newUser = await userService.create(user);
         res.status(201).json(newUser);
     }
 
-    async updateUser(req: Request<{id: string}, never, {name: string, email: string}>, res: Response) {
-        const updatedUser = await userService.update(Number(req.params.id), req.body);
-        if (updatedUser) {
-            res.json(updatedUser);
-        } else {
-            res.status(404).send('User not found');
-        }
+    async updateUser(req: Request<{id: string}, never, UpsertUserDto>, res: Response) {
+        const user: User = User.newUser(req.body);
+        const updatedUser: User = await userService.update(Number(req.params.id), user);
+        res.json(updatedUser);
     }
 
-    async deleteUser(req: Request<{id: string}>, res: Response) {
+    async deleteUser(req: Request<{id: string}>, res: Response): Promise<void> {
         await userService.delete(Number(req.params.id));
         res.status(204).end();
     }

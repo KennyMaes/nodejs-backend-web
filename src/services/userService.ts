@@ -8,18 +8,20 @@ export class UserService {
         return repository.findAll();
     }
 
-    async findById(id: number): Promise<User | null> {
-        return repository.findById(id);
+    async findById(id: number): Promise<User> {
+        const user = await repository.findById(id);
+        if (user) {
+            return user;
+        }
+        throw new BadRequestError(`No user found for id: ${id}`)
     }
 
     async create(user: Omit<User, 'id'>): Promise<User> {
-        if (!user.name || !user.email) {
-            throw new BadRequestError('Name and email are required')
-        }
+        await this.validateEmailAdresAlreadyExists(user.email);
         return repository.create(user);
     }
 
-    async update(id: number, user: Partial<User>): Promise<User | null> {
+    async update(id: number, user: Partial<User>): Promise<User> {
         let foundUser = await repository.findById(id);
         if (foundUser) {
             return repository.update(id, user);
@@ -29,6 +31,13 @@ export class UserService {
 
     async delete(id: number): Promise<void> {
         return repository.delete(id);
+    }
+
+    private async validateEmailAdresAlreadyExists(email: string) {
+        let user = await repository.findByEmail(email);
+        if (user) {
+            throw new BadRequestError('Email address already exist')
+        }
     }
 }
 export default new UserService();
