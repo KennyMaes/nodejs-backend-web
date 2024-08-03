@@ -4,7 +4,7 @@ import {UserService} from '../services/userService';
 const userService = new UserService();
 
 export class UserController {
-    private basePath: string = '/users'
+    readonly basePath: string = '/users'
 
     static register(app: Application): void {
             new UserController(app);

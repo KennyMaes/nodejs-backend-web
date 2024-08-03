@@ -2,6 +2,7 @@ import express, { Request, Response, NextFunction } from 'express';
 import dotenv from 'dotenv';
 import errorHandler from './util/errorHandler';
 import {UserController} from './controllers/userController';
+import {ProjectController} from './controllers/projectController';
 
 dotenv.config();
 
@@ -17,6 +18,7 @@ app.use((req: Request, res: Response, next: NextFunction) => {
 app.use(express.json());
 
 UserController.register(app);
+ProjectController.register(app);
 
 // Middleware to handle unhandled exceptions from the application
 app.use(errorHandler)

@@ -21,6 +21,7 @@ export class UserService {
     }
 
     async update(id: number, user: Partial<User>): Promise<User | null> {
+        // TODO: Add validation if user exist
         return this.userRepository.update(id, user);
     }
 
