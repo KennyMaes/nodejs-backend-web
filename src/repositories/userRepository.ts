@@ -1,5 +1,5 @@
-import { pool } from '../config/database'
-import { User } from '../entities/User';
+import {pool} from '../config/database';
+import {User} from '../entities/User';
 
 export class UserRepository {
     async findAll(): Promise<User[]> {
@@ -21,7 +21,7 @@ export class UserRepository {
         return result.rows[0];
     }
 
-    async update(id: number, user: Partial<User>): Promise<User | null> {
+    async update(id: number, user: Partial<User>): Promise<User> {
         const { name, email } = user;
         const result = await pool.query(
             'UPDATE users SET name = $1, email = $2 WHERE id = $3 RETURNING *',
@@ -34,3 +34,5 @@ export class UserRepository {
         await pool.query('DELETE FROM users WHERE id = $1', [id]);
     }
 }
+
+export default new UserRepository();

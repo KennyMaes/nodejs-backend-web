@@ -1,31 +1,34 @@
-import { UserRepository } from '../repositories/userRepository';
+import repository from '../repositories/userRepository';
 import { User } from '../entities/User';
-import {BadRequestError} from '../util/exceptions';
+import {BadRequestError, NotFoundError} from '../util/exceptions';
 
 export class UserService {
-    private userRepository = new UserRepository();
 
     async findAll(): Promise<User[]> {
-        return this.userRepository.findAll();
+        return repository.findAll();
     }
 
     async findById(id: number): Promise<User | null> {
-        return this.userRepository.findById(id);
+        return repository.findById(id);
     }
 
     async create(user: Omit<User, 'id'>): Promise<User> {
         if (!user.name || !user.email) {
             throw new BadRequestError('Name and email are required')
         }
-        return this.userRepository.create(user);
+        return repository.create(user);
     }
 
     async update(id: number, user: Partial<User>): Promise<User | null> {
-        // TODO: Add validation if user exist
-        return this.userRepository.update(id, user);
+        let foundUser = await repository.findById(id);
+        if (foundUser) {
+            return repository.update(id, user);
+        }
+        throw new NotFoundError(`User with id ${id} could not be updated because it not exists`)
     }
 
     async delete(id: number): Promise<void> {
-        return this.userRepository.delete(id);
+        return repository.delete(id);
     }
 }
+export default new UserService();

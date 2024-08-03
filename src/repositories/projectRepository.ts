@@ -90,3 +90,5 @@ export class ProjectRepository {
         return result.rows;
     }
 }
+
+export default new ProjectRepository()

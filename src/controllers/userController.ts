@@ -1,9 +1,7 @@
 import {Application, NextFunction, Request, Response} from 'express';
-import {UserService} from '../services/userService';
-import {ProjectService} from '../services/projectService';
+import userService from '../services/userService';
+import projectService from '../services/projectService';
 
-const userService = new UserService();
-const projectService: ProjectService = new ProjectService();
 
 export class UserController {
     readonly basePath: string = '/users'
