@@ -80,4 +80,13 @@ export class ProjectRepository {
             client.release();
         }
     }
+
+    async findByProductName(nameSearch: string): Promise<Project[]> {
+        const result = await pool.query(`
+        SELECT * FROM projects
+        WHERE LOWER(name) LIKE $1 
+        `, [`%${nameSearch.toLowerCase()}%`]);
+
+        return result.rows;
+    }
 }

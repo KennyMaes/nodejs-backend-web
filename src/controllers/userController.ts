@@ -44,7 +44,7 @@ export class UserController {
 
     async linkProjectsToUser(req: Request<{id: string}, never, {"projectIds": string[]}>, res: Response) {
         await projectService.linkProjectsToUser(Number(req.params.id), req.body.projectIds)
-        res.status(201).send
+        res.status(201).end()
     }
 
     async createUser(req: Request<never, never, {name: string, email: string}>, res: Response) {

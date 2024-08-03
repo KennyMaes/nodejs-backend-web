@@ -13,6 +13,7 @@ export class ProjectController {
 
     constructor(app: Application) {
         app.get(`${this.basePath}/`, (req: Request, res: Response, next: NextFunction) => this.getAllProjects(req, res).catch(next));
+        app.get(`${this.basePath}/search`, (req: Request<never, never, never, {nameSearch: string}>, res: Response, next: NextFunction) => this.getProjectsByNameSeach(req, res).catch(next));
         app.get(`${this.basePath}/:id`, (req: Request<{id: string}>, res: Response, next: NextFunction) => this.getProjectById(req, res).catch(next));
         app.post(`${this.basePath}/`, (req: Request<never, never, { name: string, description: string}>, res: Response, next: NextFunction) => this.createProject(req, res).catch(next));
         app.put(`${this.basePath}/:id`, (req: Request<{id: string}, never, { name: string, description: string}>, res: Response, next: NextFunction) => this.updateProject(req, res).catch(next));
@@ -49,5 +50,10 @@ export class ProjectController {
     async deleteProject(req: Request<{id: string}>, res: Response) {
         await projectService.delete(Number(req.params.id));
         res.status(204).end();
+    }
+
+    async getProjectsByNameSeach(req: Request<never, never, never, { nameSearch: string }>, res: Response) {
+        const projects = await projectService.findProjectsByName(req.query.nameSearch)
+        res.status(201).send(projects)
     }
 }

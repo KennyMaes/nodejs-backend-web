@@ -13,6 +13,15 @@ export class ProjectService {
         return this.projectRepository.findById(id);
     }
 
+    async findProjectsByName(nameSearch: string): Promise<Project[]> {
+        if (nameSearch && nameSearch.trim() !== '') {
+            return this.projectRepository.findByProductName(nameSearch)
+        } else {
+            throw new BadRequestError("There should be at least a name search value")
+        }
+
+    }
+
     async findProjectsByUserId(userId: number, limit?: number, offset?: number): Promise<Project[]> {
         return this.projectRepository.getProjectsByUserId(userId, limit, offset);
     }
