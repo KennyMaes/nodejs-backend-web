@@ -14,6 +14,12 @@ export class User {
         return user;
     }
 
+    static updateUser(user: User, dto: UpsertUserDto): User {
+        user.name = dto.name ? dto.name : user.name
+        user.email = dto.email ? dto.email : user.email
+        return user;
+    }
+
     static fromDb(userDto: UserDto): User {
         return new User(
             userDto.id,
@@ -27,14 +33,24 @@ export class User {
         this.email = email;
     }
 
-    validate(): void {
-        if (!this.isValid()) {
-            throw new BadRequestError('No valid user, name and email should both be filled in')
+    private validate(): void {
+        if (!this.nameIsValid()) {
+            throw new BadRequestError('Invalid name')
+        }
+        if (!this.emailIsValid()) {
+            throw new BadRequestError('Invalid email')
         }
     }
 
-    isValid(): boolean {
+    private emailIsValid() {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return isNotBlank(this.email)
+            && emailRegex.test(this.email);
+    }
+
+    private nameIsValid(): boolean {
+        const alphaRegex = /^[a-zA-Z\s]+$/;
         return isNotBlank(this.name)
-            && isNotBlank(this.email)
+        && alphaRegex.test(this.name);
     }
 }

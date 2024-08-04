@@ -1,4 +1,4 @@
-import {BadRequestError, NotFoundError} from '../util/exceptions';
+import {NotFoundError} from '../util/exceptions';
 import {Project} from '../entities/Project';
 import repository from '../repositories/projectRepository';
 

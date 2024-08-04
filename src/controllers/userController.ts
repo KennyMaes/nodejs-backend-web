@@ -50,7 +50,8 @@ export class UserController {
     }
 
     async updateUser(req: Request<{id: string}, never, UpsertUserDto>, res: Response) {
-        const user: User = User.newUser(req.body);
+        const currentUser: User = await userService.findById(Number(req.params.id));
+        const user: User = User.updateUser(currentUser, req.body);
         const updatedUser: User = await userService.update(Number(req.params.id), user);
         res.json(updatedUser);
     }
