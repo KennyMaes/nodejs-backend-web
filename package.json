@@ -6,7 +6,7 @@
   "scripts": {
     "start-db": "cd ops && docker compose --env-file ../.env up",
     "build": "tsc",
-    "start": "node dist/app.js",
+    "start-application": "npm run build && node dist/app.js",
     "dev": "ts-node-dev --respawn src/app.ts",
     "migrate": "node-pg-migrate up"
   },

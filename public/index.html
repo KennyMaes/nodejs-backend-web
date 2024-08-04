@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="./style.css">
+    <title>NodeJS API</title>
+</head>
+<body>
+<div class="container">
+    <h1>Welcome to my API</h1>
+    <p>Fetch all user or projects (Use pretty print to see the formatted json)</p>
+    <a href="/users">Get all users</a>
+    <a href="/projects">Get all projects</a>
+
+    <h2>Search projects</h2>
+    <div id="search-projects-container">
+        <form id="search-projects-form" method="get" class="form">
+            <input type="text" id="search-input" name="nameSearch" placeholder="Search..." required>
+            <button type="submit" id="search-projects-button">Search</button>
+        </form>
+    </div>
+
+    <h2>Get all projects for a user with offset and limit</h2>
+    <div id="search-user-projects-container">
+        <form id="search-user-projects-form" action="/users/projects" method="get" class="form">
+            <input type="number" id="userId-input" name="userid" placeholder="user id" required>
+            <input type="number" id="limit-input" name="limit" placeholder="limit">
+            <input type="number" id="offset-input" name="offset" placeholder="offset">
+            <button id="search-user-projects-button">Search</button>
+        </form>
+    </div>
+</div>
+</body>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const form = document.getElementById('search-user-projects-form');
+        const idInput = document.getElementById('userId-input');
+
+        form.addEventListener('submit', (event) => {
+            const userId = idInput.value;
+            if (!userId) {
+                alert('Please enter a User ID.');
+                event.preventDefault(); // Prevent form submission if ID is empty
+                return;
+            }
+
+            // Update the form action URL with the user-provided ID
+            form.action = `/users/${userId}/projects`;
+
+            // Optionally log the action URL or perform additional logic
+            console.log('Form action URL:', form.action);
+        });
+    });
+</script>
+</html>

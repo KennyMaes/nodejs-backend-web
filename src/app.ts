@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 import errorHandler from './util/errorHandler';
 import {UserController} from './controllers/userController';
 import {ProjectController} from './controllers/projectController';
+import path from 'node:path';
 
 dotenv.config();
 
@@ -16,7 +17,13 @@ app.use((req: Request, res: Response, next: NextFunction) => {
 
 // JSON parsing middleware
 app.use(express.json());
+app.use(express.static(path.join(__dirname, '../public')));
 
+app.get('/', (req: Request, res: Response) => {
+    res.sendFile(path.join(__dirname, '../public', 'index.html'));
+});
+
+//Register controllers in app
 UserController.register(app);
 ProjectController.register(app);
 
