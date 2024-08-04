@@ -1,4 +1,4 @@
-import {BadRequestError} from '../util/exceptions';
+import {BadRequestError, NotFoundError} from '../util/exceptions';
 import {Project} from '../entities/Project';
 import repository from '../repositories/projectRepository';
 
@@ -8,17 +8,16 @@ export class ProjectService {
         return repository.findAll();
     }
 
-    async findById(id: number): Promise<Project | null> {
-        return repository.findById(id);
+    async findById(id: number): Promise<Project> {
+        const project = await repository.findById(id);
+        if (project) {
+            return project;
+        }
+        throw new NotFoundError(`No project found for id: ${id}`)
     }
 
     async findProjectsByName(nameSearch: string): Promise<Project[]> {
-        if (nameSearch && nameSearch.trim() !== '') {
-            return repository.findByProductName(nameSearch)
-        } else {
-            throw new BadRequestError("There should be at least a name search value")
-        }
-
+        return repository.findByProductName(nameSearch)
     }
 
     async findProjectsByUserId(userId: number, limit?: number, offset?: number): Promise<Project[]> {
@@ -30,9 +29,6 @@ export class ProjectService {
     }
 
     async create(project: Omit<Project, 'id'>): Promise<Project> {
-        if (!project.name || !project.description) {
-            throw new BadRequestError('Name and description are required')
-        }
         return repository.create(project);
     }
 
