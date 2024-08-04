@@ -1,4 +1,7 @@
 # NodeJS API
+## Repository
+[Repository](https://github.com/KennyMaes/nodejs-backend-web)
+
 ## Stack
 - Typescript
 - Postgres
@@ -13,3 +16,4 @@
 The application should now run by default on [localhost:3001](http://localHost:3001)
 
 There you could find some basic interface to do some of the actions on the API
+
