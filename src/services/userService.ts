@@ -1,6 +1,7 @@
 import repository from '../repositories/userRepository';
 import { User } from '../entities/User';
 import {BadRequestError, NotFoundError} from '../util/exceptions';
+import {UpsertUserDto} from '../dto/upsertUserDto';
 
 export class UserService {
 
@@ -21,10 +22,14 @@ export class UserService {
         return repository.create(user);
     }
 
-    async update(id: number, user: Partial<User>): Promise<User> {
-        let foundUser = await repository.findById(id);
-        if (foundUser) {
-            return repository.update(id, user);
+    async update(id: number, upsertUser: Partial<UpsertUserDto>): Promise<User> {
+        let currentUser = await repository.findById(id);
+        if (currentUser) {
+            if (upsertUser.email && currentUser.email !== upsertUser.email) {
+                await this.validateEmailAdresAlreadyExists(upsertUser.email)
+            }
+            const updatedUser: User = User.updateUser(currentUser, upsertUser);
+            return repository.update(id, updatedUser);
         }
         throw new NotFoundError(`User with id ${id} could not be updated because it not exists`)
     }

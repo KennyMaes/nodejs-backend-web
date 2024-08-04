@@ -14,7 +14,7 @@ export class User {
         return user;
     }
 
-    static updateUser(user: User, dto: UpsertUserDto): User {
+    static updateUser(user: User, dto: Partial<User>): User {
         user.name = dto.name ? dto.name : user.name
         user.email = dto.email ? dto.email : user.email
         return user;
