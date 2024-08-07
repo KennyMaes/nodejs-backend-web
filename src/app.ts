@@ -1,8 +1,8 @@
 import express, { Request, Response, NextFunction } from 'express';
 import dotenv from 'dotenv';
-import errorHandler from './util/errorHandler';
-import {UserController} from './controllers/userController';
-import {ProjectController} from './controllers/projectController';
+import errorHandler from './util/error-handler';
+import {UserController} from './controllers/user.controller';
+import {ProjectController} from './controllers/project.controller';
 import path from 'node:path';
 
 dotenv.config();
@@ -14,6 +14,8 @@ app.use((req: Request, res: Response, next: NextFunction) => {
     console.log(`${req.method} ${req.url}`);
     next();
 });
+
+//TODO: Alles doen zoals de errorHandler
 
 // JSON parsing middleware
 app.use(express.json());

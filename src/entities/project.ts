@@ -1,6 +1,7 @@
-import {UpsertProjectDto} from '../dto/upsertProjectDto';
+import {UpsertProjectDto} from '../dto/upsert-project.dto';
 import {isNotBlank} from '../util/validation';
 import {BadRequestError} from '../util/exceptions';
+import {isNotEmpty} from 'class-validator';
 
 export class Project {
 
@@ -28,8 +29,8 @@ export class Project {
 
     private isValid() {
         return (
-            isNotBlank(this.name) &&
-            isNotBlank(this.description)
+            isNotEmpty(this.name) &&
+            isNotEmpty(this.description)
         )
     }
 }

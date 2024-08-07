@@ -1,7 +1,7 @@
-import repository from '../repositories/userRepository';
-import { User } from '../entities/User';
+import repository from '../repositories/user.repository';
+import { User } from '../entities/user';
 import {BadRequestError, NotFoundError} from '../util/exceptions';
-import {UpsertUserDto} from '../dto/upsertUserDto';
+import {UpsertUserDto} from '../dto/upsert-user.dto';
 
 export class UserService {
 

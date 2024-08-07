@@ -1,5 +1,5 @@
 import { pool } from '../config/database'
-import { Project } from '../entities/Project';
+import { Project } from '../entities/project';
 
 export class ProjectRepository {
     async findAll(): Promise<Project[]> {

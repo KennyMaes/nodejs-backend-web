@@ -1,9 +1,8 @@
 import {Application, NextFunction, Request, Response} from 'express';
-import userService from '../services/userService';
-import projectService from '../services/projectService';
-import {User} from '../entities/User';
-import {UpsertUserDto} from '../dto/upsertUserDto';
-
+import userService from '../services/user.service';
+import projectService from '../services/project.service';
+import {User} from '../entities/user';
+import {UpsertUserDto} from '../dto/upsert-user.dto';
 
 export class UserController {
     readonly basePath: string = '/users'

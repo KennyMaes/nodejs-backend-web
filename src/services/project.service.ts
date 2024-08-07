@@ -1,6 +1,6 @@
 import {NotFoundError} from '../util/exceptions';
-import {Project} from '../entities/Project';
-import repository from '../repositories/projectRepository';
+import {Project} from '../entities/project';
+import repository from '../repositories/project.repository';
 
 export class ProjectService {
 

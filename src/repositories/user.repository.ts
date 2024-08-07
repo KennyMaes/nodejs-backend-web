@@ -1,7 +1,7 @@
 import {pool} from '../config/database';
-import {User} from '../entities/User';
+import {User} from '../entities/user';
 import {QueryResult} from 'pg';
-import {UserDto} from '../dto/userDto';
+import {UserDto} from '../dto/user.dto';
 
 export class UserRepository {
     async findAll(): Promise<User[]> {

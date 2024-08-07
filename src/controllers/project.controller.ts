@@ -1,8 +1,8 @@
 import {Application, NextFunction, Request, Response} from 'express';
-import service from '../services/projectService';
+import service from '../services/project.service';
 import {BadRequestError} from '../util/exceptions';
-import {UpsertProjectDto} from '../dto/upsertProjectDto';
-import {Project} from '../entities/Project';
+import {UpsertProjectDto} from '../dto/upsert-project.dto';
+import {Project} from '../entities/project';
 
 export class ProjectController {
     readonly basePath: string = '/projects';

@@ -1,7 +1,8 @@
-import {UpsertUserDto} from '../dto/upsertUserDto';
+import {UpsertUserDto} from '../dto/upsert-user.dto';
 import {BadRequestError} from '../util/exceptions';
 import {isNotBlank} from '../util/validation';
-import {UserDto} from '../dto/userDto';
+import {UserDto} from '../dto/user.dto';
+import {isDefined, isEmail, isNotEmpty} from 'class-validator';
 
 export class User {
     static newUser(dto: UpsertUserDto): User {
@@ -43,14 +44,13 @@ export class User {
     }
 
     private emailIsValid() {
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        return isNotBlank(this.email)
-            && emailRegex.test(this.email);
+        return isNotEmpty(this.email)
+            && isEmail(this.email);
     }
 
     private nameIsValid(): boolean {
         const alphaRegex = /^[a-zA-Z\s]+$/;
-        return isNotBlank(this.name)
+        return isNotEmpty(this.name)
         && alphaRegex.test(this.name);
     }
 }
