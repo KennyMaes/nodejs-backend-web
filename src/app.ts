@@ -1,11 +1,13 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import errorHandlingMiddleware from './util/error-handler';
-import {usersController} from './controllers/user.controller';
-import {projectcontroller} from './controllers/project.controller';
 import path from 'node:path';
-import {homeController} from './controllers/home.controller';
 import {loggingMiddleware} from './util/logging.middleware';
+import {userProjectsController} from './controllers/user-projects.controller.ts';
+import {projectRoutes} from './routes/project.routes';
+import {userRoutes} from './routes/user.routes';
+import {homeRoutes} from './routes/home.routes';
+import {userProjectsRoutes} from './routes/user-projects.routes';
 
 dotenv.config();
 
@@ -16,9 +18,9 @@ app
     .use(loggingMiddleware)
     .use(express.json())
     .use(express.static(path.join(__dirname, '../public')))
-    .use('/', homeController)
-    .use('/users', usersController)
-    .use('/projects', projectcontroller)
+    .use('/', homeRoutes)
+    .use('/users', userRoutes, userProjectsRoutes)
+    .use('/projects', projectRoutes)
     .use(errorHandlingMiddleware)
 
     // Log when server is started and which port it's running on
