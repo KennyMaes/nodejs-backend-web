@@ -3,7 +3,6 @@ import dotenv from 'dotenv';
 import errorHandlingMiddleware from './util/error-handler';
 import path from 'node:path';
 import {loggingMiddleware} from './util/logging.middleware';
-import {userProjectsController} from './controllers/user-projects.controller.ts';
 import {projectRoutes} from './routes/project.routes';
 import {userRoutes} from './routes/user.routes';
 import {homeRoutes} from './routes/home.routes';
