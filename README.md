@@ -17,6 +17,7 @@
 - The application should now run by default on [localhost:3001](http://localHost:3001)
 
 ### Docker container
+- Create a .env.docker file and use the same variables we see in the example file and change the POSTGRES_HOST from `localhost` to `db`
 - Run `docker compose --env-file ../.env.docker up --build` from the ops folder
 - This will start the database and if the health check is ok the application will start
 - The application is mapped to run on [localhost:3005](http://localHost:3005)
