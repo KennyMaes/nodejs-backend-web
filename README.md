@@ -34,3 +34,5 @@
 
 I created a static page where you could find some basic interaction with the API
 
+There is a config file named `insomnia_nodejs_ehb_requests.json` for insomnia that contains all possible requests that could be done
+
