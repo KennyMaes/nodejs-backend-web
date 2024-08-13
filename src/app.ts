@@ -12,6 +12,7 @@ dotenv.config();
 
 const app = express();
 const port = process.env.PORT || 3000;
+const host =  "0.0.0.0"
 
 app
     .use(loggingMiddleware)
@@ -23,6 +24,6 @@ app
     .use(errorHandlingMiddleware)
 
     // Log when server is started and which port it's running on
-    .listen(port, () => {
+    .listen({host, port}, () => {
     console.log(`Server is running on http://localhost:${port}`);
 });

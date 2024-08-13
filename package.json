@@ -2,13 +2,14 @@
   "name": "nodejs-backend-web",
   "version": "1.0.0",
   "description": "Nodejs task for backend web",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
-    "start-db": "cd ops && docker compose --env-file ../.env up",
+    "start-db": "cd ops && docker compose -f ./docker-compose.local-db.yml --env-file ../.env up",
     "build": "tsc",
-    "start-application": "npm run build && node dist/app.js",
     "dev": "ts-node-dev --respawn src/app.ts",
-    "migrate": "node-pg-migrate up"
+    "migrate": "node-pg-migrate up",
+    "start": "npm run build && node dist/app.js",
+    "start:app": "npm run migrate && npm run start"
   },
   "author": "Kenny Maes",
   "license": "ISC",

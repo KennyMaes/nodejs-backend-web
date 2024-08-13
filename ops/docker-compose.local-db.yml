@@ -1,0 +1,13 @@
+version: '3'
+services:
+  db:
+    image: postgres:latest
+    container_name: postgres_db_ehb_local
+    env_file:
+      - "../.env"
+    ports:
+      - "${POSTGRES_PORT}:5432"
+    volumes:
+      - postgres_ehb_local_data:/var/lib/postgresql/data
+volumes:
+  postgres_ehb_local_data:
