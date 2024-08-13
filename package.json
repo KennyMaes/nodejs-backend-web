@@ -4,7 +4,7 @@
   "description": "Nodejs task for backend web",
   "main": "app.js",
   "scripts": {
-    "start-db": "cd ops && docker compose -f ./docker-compose.local-db.yml --env-file ../.env up",
+    "start-db": "cd ops && docker-compose -f ./docker-compose.local-db.yml --env-file ../.env up",
     "build": "tsc",
     "dev": "ts-node-dev --respawn src/app.ts",
     "migrate": "node-pg-migrate up",

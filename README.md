@@ -11,10 +11,11 @@
 ## Commands
 ### Manually (local)
 - Run `npm install`
+- Create .env file from .env-example
 - Start the database: `npm run start-db`
 - Start with the migration to create the tables in the database`npm run migrate`
 - Run the application `npm start`
-- The application should now run by default on [localhost:3001](http://localHost:3001)
+- The application should now run by default on [localhost:3000](http://localHost:3000)
 
 ### Docker container
 - Create a .env.docker file and use the same variables we see in the example file and change the POSTGRES_HOST from `localhost` to `db`

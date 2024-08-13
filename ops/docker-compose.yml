@@ -19,7 +19,7 @@ services:
       context: ../  # Adjust the build context to the parent directory
       dockerfile: ops/Dockerfile  # Specify the path to the Dockerfile
     ports:
-      - "3005:${PORT}"
+      - "3005:3000"
     volumes:
       - ../src:/usr/src/app  # Mount the src directory
       - /usr/src/app/node_modules  # Persist node_modules to avoid conflicts
